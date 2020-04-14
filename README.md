@@ -7,7 +7,7 @@ https://github.com/fizyr/keras-retinanet.git
 - Nvidia Docker runtime: https://github.com/NVIDIA/nvidia-docker#quickstart
 - CUDA 10.1 or higher on your host, check with `nvidia-smi`
 
-### Example
+### Host machine
 - Build image 
     ```shell script
     docker build . -t retinanet:latest
@@ -33,12 +33,14 @@ https://github.com/fizyr/keras-retinanet.git
       --name retinanet retinanet:latest  /bin/bash
     ```
 
-- Train Coco dataset in container
-    ```shell script
-      cd /retinanet/keras_retinanet/bin && \
-      python3 train.py --snapshot-path /snapshots \
-        coco /datasets/coco/
-    ```
+- Converting a training model to inference model
+    - Running directly from the repository:
+    
+        `keras_retinanet/bin/convert_model.py /path/to/training/model.h5 /path/to/save/inference/model.h5`
+
+    - Using the installed script:
+    
+        `retinanet-convert-model /path/to/training/model.h5 /path/to/save/inference/model.h5`
 
 - Save and Load docker image
     ```shell script
@@ -46,9 +48,24 @@ https://github.com/fizyr/keras-retinanet.git
       docker load < retinanet.tar
     ```
 
+### In container
+- Train Coco dataset in container
+    ```shell script
+      cd /retinanet/keras_retinanet/bin && \
+      python3 train.py --snapshot-path /snapshots \
+        coco /datasets/coco/
+    ```
+- Resume training from a snapshot
+    ```shell script
+      cd /retinanet/keras_retinanet/bin && \
+      python3 train.py --snapshot /snapshots/resnet50_coco_50.h5 \
+        --initial-epoch 50 --epochs 100 \
+        coco /datasets/coco/
+    ```
+
 The retinaNet repo is in `/retinanet`
 
-# issue
+### issue
 If meet the following error
 
 `xhost local:root`
