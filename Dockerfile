@@ -28,11 +28,15 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
 # Upgrade pip to latest version is necessary, otherwise the default version cannot install tensorflow 2.1.0
 RUN pip3 install --upgrade setuptools pip
 
-#for python api
-RUN pip3 install numpy \
+#for python packages
+RUN pip3 install cython \
+        numpy>=1.14 \
         wheel \
         opencv-python==3.4.5.20 \
         tensorflow-gpu
+
+# for coco api
+RUN pip3 install git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI
 
 FROM ubuntu-cudnn AS retinaNet-prepare
 
